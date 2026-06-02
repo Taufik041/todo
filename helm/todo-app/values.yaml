@@ -3,7 +3,7 @@ namespace: todo-app
 api:
   image: taufik041/todo-api:latest
   serviceType: ClusterIP
-  replicas: 3
+  replicas: 1
   port: 8000
   resources:
     requests:
