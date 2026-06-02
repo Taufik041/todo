@@ -1,7 +1,7 @@
 namespace: todo-app
 
 api:
-  image: todo-api:latest
+  image: taufik041/todo-api:latest
   replicas: 2
   port: 8000
   resources:
@@ -13,7 +13,7 @@ api:
       cpu: "250m"
 
 worker:
-  image: todo-worker:latest
+  image: taufik041/todo-worker:latest
   replicas: 1
   resources:
     requests:
@@ -24,7 +24,7 @@ worker:
       cpu: "100m"
 
 frontend:
-  image: todo-frontend:latest
+  image: taufik041/todo-frontend:latest
   replicas: 1
   port: 3000
   apiUrl: "http://api:8000"

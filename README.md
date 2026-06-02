@@ -12,7 +12,7 @@ A containerized todo application demonstrating microservice architecture with a 
 | **Message Queue** | RabbitMQ 3 |
 | **Worker** | Python, aio-pika |
 | **Frontend** | Next.js 15, TypeScript, Tailwind CSS, shadcn/ui |
-| **Containers** | Docker, Docker Compose |
+| **Containers** | Docker, Docker Compose, Docker Hub |
 | **Orchestration** | Kubernetes (Kind for local dev) |
 | **Packaging** | Helm 3 |
 
@@ -55,13 +55,31 @@ kind load docker-image todo-worker:latest --name todo
 kind load docker-image todo-frontend:latest --name todo
 
 # Deploy
-helm install todo-app helm/todo-app/
+helm install todo helm/todo-app/
 
 # Access services
 kubectl port-forward -n todo-app svc/api 8000:8000
 kubectl port-forward -n todo-app svc/frontend 3000:3000
 kubectl port-forward -n todo-app svc/rabbitmq 15672:15672
 ```
+
+### Production Deployment
+
+Images are published to Docker Hub. Any server with Kubernetes can deploy the app:
+
+```bash
+git clone https://github.com/Taufik041/todo.git
+cd todo
+helm install todo helm/todo-app/
+```
+
+- Frontend: http://\<server-ip\>:30000
+- API: http://\<server-ip\>:30001
+
+Docker Hub images:
+- taufik041/todo-api
+- taufik041/todo-worker
+- taufik041/todo-frontend
 
 ## API Endpoints
 
@@ -84,6 +102,14 @@ pytest tests/ -v
 ```
 
 Tests use an in-memory SQLite database and mock RabbitMQ and Redis — no infrastructure required.
+
+## Linting
+
+```bash
+ruff check .
+```
+
+Config in `ruff.toml`. Rules: E, F, W, I, N, UP, B, A, COM, C4, T20, RET, SIM.
 
 ## Project Structure
 

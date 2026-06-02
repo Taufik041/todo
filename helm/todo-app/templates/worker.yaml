@@ -16,7 +16,6 @@ spec:
       containers:
         - name: worker
           image: {{ .Values.worker.image }}
-          imagePullPolicy: Never
           envFrom:
             - configMapRef:
                 name: todo-config

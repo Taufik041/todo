@@ -16,7 +16,6 @@ spec:
       containers:
         - name: api
           image: {{ .Values.api.image }}
-          imagePullPolicy: Never
           ports:
             - containerPort: {{ .Values.api.port }}
           envFrom:
@@ -50,8 +49,10 @@ metadata:
   name: api
   namespace: {{ .Values.namespace }}
 spec:
+  type: NodePort
   selector:
     app: api
   ports:
     - port: {{ .Values.api.port }}
       targetPort: {{ .Values.api.port }}
+      nodePort: 30001
