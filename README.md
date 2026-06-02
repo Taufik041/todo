@@ -15,6 +15,8 @@ A containerized todo application demonstrating microservice architecture with a 
 | **Containers** | Docker, Docker Compose, Docker Hub |
 | **Orchestration** | Kubernetes (Kind for local dev) |
 | **Packaging** | Helm 3 |
+| **GitOps** | ArgoCD |
+| **Registry** | Docker Hub |
 
 ## Architecture
 
@@ -81,6 +83,20 @@ Docker Hub images:
 - taufik041/todo-worker
 - taufik041/todo-frontend
 
+## GitOps (ArgoCD)
+
+ArgoCD watches the main branch and auto-deploys on every push.
+
+Setup on a new cluster:
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -f argocd/application.yaml
+```
+
+After this, any change pushed to `helm/todo-app/` on main is automatically deployed.
+
 ## API Endpoints
 
 | Method | Path | Description | Success |
@@ -130,6 +146,8 @@ todo/
 ├── tests/
 │   ├── conftest.py     async client fixture, DB/mq overrides
 │   └── test_todos.py   endpoint tests
+├── argocd/
+│   └── application.yaml    ArgoCD app definition
 ├── helm/todo-app/      Helm chart (values, templates)
 ├── k8s/                raw Kubernetes manifests
 ├── docker-compose.yml
