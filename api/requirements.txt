@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+asyncpg
+redis
+aio-pika
+pytest
+pytest-asyncio
+httpx
+aiosqlite

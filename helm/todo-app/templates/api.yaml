@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: {{ .Values.api.image }}
+          imagePullPolicy: Never
+          ports:
+            - containerPort: {{ .Values.api.port }}
+          envFrom:
+            - configMapRef:
+                name: todo-config
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.api.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.api.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          resources:
+            requests:
+              memory: {{ .Values.api.resources.requests.memory | quote }}
+              cpu: {{ .Values.api.resources.requests.cpu | quote }}
+            limits:
+              memory: {{ .Values.api.resources.limits.memory | quote }}
+              cpu: {{ .Values.api.resources.limits.cpu | quote }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: api
+  ports:
+    - port: {{ .Values.api.port }}
+      targetPort: {{ .Values.api.port }}

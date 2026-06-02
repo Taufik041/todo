@@ -1,0 +1,5 @@
+apiVersion: v2
+name: todo-app
+description: A todo app with FastAPI, Redis, RabbitMQ, and PostgreSQL
+version: 1.0.0
+appVersion: "1.0.0"
