@@ -19,7 +19,9 @@ async def on_message(message: aio_pika.abc.AbstractIncomingMessage) -> None:
             payload = json.loads(message.body)
             event_type = payload.get("event_type", message.routing_key)
             data = payload.get("data", {})
-            logger.info("Event received | type=%s | payload=%s", event_type, json.dumps(data))
+            logger.info(
+                "Event received | type=%s | payload=%s", event_type, json.dumps(data)
+            )
         except Exception as exc:
             logger.error("Failed to process message: %s", exc)
 
@@ -45,7 +47,9 @@ async def main() -> None:
         except asyncio.CancelledError:
             break
         except Exception as exc:
-            logger.warning("RabbitMQ connection error: %s. Retrying in %ds...", exc, delay)
+            logger.warning(
+                "RabbitMQ connection error: %s. Retrying in %ds...", exc, delay
+            )
             await asyncio.sleep(delay)
             delay = min(delay * 2, 60)
 

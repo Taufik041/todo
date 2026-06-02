@@ -1,8 +1,10 @@
+import contextlib
 import json
 import logging
+import os
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
-from typing import AsyncGenerator
 from uuid import UUID
 
 import redis.asyncio as aioredis
@@ -16,8 +18,6 @@ from api.database import create_tables, get_session
 from api.models import Todo, TodoCreate, TodoResponse, TodoUpdate
 
 logger = logging.getLogger(__name__)
-
-import os
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379")
 CACHE_TTL = 300  # 5 minutes
@@ -63,10 +63,8 @@ async def cache_get(key: str) -> str | None:
 async def cache_set(key: str, value: str) -> None:
     if redis_client is None:
         return
-    try:
+    with contextlib.suppress(Exception):
         await redis_client.setex(key, CACHE_TTL, value)
-    except Exception:
-        pass
 
 
 async def cache_invalidate_todos() -> None:
@@ -95,7 +93,8 @@ async def create_todo(
     await session.commit()
     await session.refresh(todo)
     await cache_invalidate_todos()
-    await rabbitmq.publish_event("todo.created", TodoResponse.model_validate(todo).model_dump())
+    event_data = TodoResponse.model_validate(todo).model_dump()
+    await rabbitmq.publish_event("todo.created", event_data)
     return todo
 
 
@@ -149,7 +148,8 @@ async def update_todo(
     await session.commit()
     await session.refresh(todo)
     await cache_invalidate_todos()
-    await rabbitmq.publish_event("todo.updated", TodoResponse.model_validate(todo).model_dump())
+    event_data = TodoResponse.model_validate(todo).model_dump()
+    await rabbitmq.publish_event("todo.updated", event_data)
     return todo
 
 

@@ -1,0 +1,11 @@
+line-length = 88
+
+[lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "COM", "C4", "T20", "RET", "SIM"]
+ignore = [
+    "COM812",  # trailing comma (conflicts with formatter)
+    "B008",
+]
+
+[lint.per-file-ignores]
+"tests/*" = ["S101", "ANN", "D"]  # assert, type hints, docstrings are fine in tests
