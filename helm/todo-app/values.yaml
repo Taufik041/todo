@@ -2,7 +2,7 @@ namespace: todo-app
 
 api:
   image: taufik041/todo-api:latest
-  replicas: 2
+  replicas: 3
   port: 8000
   resources:
     requests:
