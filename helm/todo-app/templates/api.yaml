@@ -49,7 +49,7 @@ metadata:
   name: api
   namespace: {{ .Values.namespace }}
 spec:
-  type: NodePort
+  type: {{ .Values.api.serviceType }}
   selector:
     app: api
   ports:

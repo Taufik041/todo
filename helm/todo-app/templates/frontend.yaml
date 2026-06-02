@@ -37,7 +37,7 @@ metadata:
   name: frontend
   namespace: {{ .Values.namespace }}
 spec:
-  type: NodePort
+  type: {{ .Values.frontend.serviceType }}
   selector:
     app: frontend
   ports:

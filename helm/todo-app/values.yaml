@@ -2,6 +2,7 @@ namespace: todo-app
 
 api:
   image: taufik041/todo-api:latest
+  serviceType: ClusterIP
   replicas: 3
   port: 8000
   resources:
@@ -25,6 +26,7 @@ worker:
 
 frontend:
   image: taufik041/todo-frontend:latest
+  serviceType: ClusterIP
   replicas: 1
   port: 3000
   apiUrl: "http://api:8000"
