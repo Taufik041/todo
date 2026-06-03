@@ -1,4 +1,9 @@
+import os
 from unittest.mock import AsyncMock, patch
+
+os.environ.setdefault("DATABASE_URL", "sqlite+aiosqlite:///:memory:")
+os.environ.setdefault("REDIS_URL", "redis://localhost:6379")
+os.environ.setdefault("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
 
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
