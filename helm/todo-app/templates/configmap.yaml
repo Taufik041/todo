@@ -4,6 +4,5 @@ metadata:
   name: todo-config
   namespace: {{ .Values.namespace }}
 data:
-  DATABASE_URL: "postgresql+asyncpg://{{ .Values.postgres.username }}:{{ .Values.postgres.password }}@postgres:{{ .Values.postgres.port }}/{{ .Values.postgres.database }}"
   REDIS_URL: "redis://redis:{{ .Values.redis.port }}"
   RABBITMQ_URL: "amqp://guest:guest@rabbitmq:{{ .Values.rabbitmq.port }}/"

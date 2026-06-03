@@ -21,6 +21,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: todo-config
+            - secretRef:
+                name: todo-secret
           readinessProbe:
             httpGet:
               path: /health

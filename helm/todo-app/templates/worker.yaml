@@ -19,6 +19,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: todo-config
+            - secretRef:
+                name: todo-secret
           resources:
             requests:
               memory: {{ .Values.worker.resources.requests.memory | quote }}

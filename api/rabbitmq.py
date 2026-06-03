@@ -5,7 +5,7 @@ from typing import Any
 
 import aio_pika
 
-RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://guest:guest@rabbitmq:5672/")
+RABBITMQ_URL = os.environ["RABBITMQ_URL"]
 EXCHANGE_NAME = "todos"
 
 logger = logging.getLogger(__name__)

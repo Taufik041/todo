@@ -19,7 +19,7 @@ from api.models import Todo, TodoCreate, TodoResponse, TodoUpdate
 
 logger = logging.getLogger(__name__)
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379")
+REDIS_URL = os.environ["REDIS_URL"]
 CACHE_TTL = 300  # 5 minutes
 
 redis_client: aioredis.Redis | None = None
