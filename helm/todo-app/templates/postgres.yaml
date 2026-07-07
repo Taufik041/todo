@@ -4,6 +4,7 @@ metadata:
   name: postgres-pvc
   namespace: {{ .Values.namespace }}
 spec:
+  storageClassName: {{ .Values.postgres.storageClassName }}
   accessModes:
     - ReadWriteOnce
   resources:
@@ -60,4 +61,3 @@ spec:
   ports:
     - port: {{ .Values.postgres.port }}
       targetPort: {{ .Values.postgres.port }}
-  storageClassName: {{ .Values.postgres.storageClassName }}
