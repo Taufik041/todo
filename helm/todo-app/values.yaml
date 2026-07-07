@@ -38,6 +38,10 @@ frontend:
       memory: "256Mi"
       cpu: "250m"
 
+storageClass:
+  create: true
+  name: gp3
+
 postgres:
   image: postgres:16-alpine
   port: 5432
@@ -45,6 +49,7 @@ postgres:
   username: postgres
   password: postgres
   storage: 1Gi
+  storageClassName: gp3
 
 redis:
   image: redis:7-alpine
