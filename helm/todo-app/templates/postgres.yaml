@@ -60,3 +60,4 @@ spec:
   ports:
     - port: {{ .Values.postgres.port }}
       targetPort: {{ .Values.postgres.port }}
+  storageClassName: {{ .Values.postgres.storageClassName }}
