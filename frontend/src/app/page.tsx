@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, ClipboardList } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import { api, type Todo, type TodoUpdate } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { TodoItem } from "@/components/todo-item";
 import { TodoForm } from "@/components/todo-form";
 import { Button } from "@/components/ui/button";
@@ -19,6 +21,8 @@ import {
 type Filter = "all" | "active" | "completed";
 
 export default function Home() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>("all");
@@ -36,8 +40,20 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);
+    if (!authLoading && !user) router.replace("/login");
+  }, [authLoading, user, router]);
+
+  useEffect(() => {
+    if (user) fetchTodos();
+  }, [user, fetchTodos]);
+
+  if (authLoading || !user) {
+    return (
+      <main className="min-h-screen bg-background">
+        <div className="text-center py-16 text-muted-foreground text-sm">Loading…</div>
+      </main>
+    );
+  }
 
   const filtered = todos.filter((t) => {
     if (filter === "active") return !t.completed;

@@ -48,8 +48,6 @@ postgres:
   image: postgres:16-alpine
   port: 5432
   database: todos
-  username: postgres
-  password: postgres
   storage: 1Gi
   storageClassName: gp3
 
@@ -61,3 +59,6 @@ rabbitmq:
   image: rabbitmq:3-management-alpine
   port: 5672
   managementPort: 15672
+
+eso:
+  enabled: True

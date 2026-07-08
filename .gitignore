@@ -222,3 +222,7 @@ __marimo__/
 *.tfstate.*
 *.tfvars
 crash.log
+node_modules/
+.next/
+frontend/node_modules/
+frontend/.next/
