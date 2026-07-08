@@ -50,6 +50,19 @@ flowchart TB
 
 The app itself: the FastAPI backend stores todos in PostgreSQL, caches reads in Redis, and publishes `todo.created` / `todo.updated` / `todo.deleted` events to a RabbitMQ topic exchange, which a separate worker consumes and logs. Redis and RabbitMQ are optional at runtime — if either is down the API logs a warning and keeps working.
 
+## CI/CD
+
+Every push and pull request runs pytest and ruff. Pull requests that touch a service (`api/`, `worker/`, `frontend/`, or a Dockerfile) also get a Docker build check per service: three path-filtered jobs call a single reusable `workflow_call` workflow (`docker-build.yaml`) with `push: false`, so PR checks receive no registry credentials. Branch protection requires all five checks (pytest, ruff, and the three build checks) before merge. On merge to main, per-service path-filtered workflows call the same reusable workflow with `secrets: inherit`, build and push the changed service's image tagged with the commit SHA, and commit the new tag into `helm/todo-app/values.yaml` — ArgoCD detects the change and deploys it.
+
+```mermaid
+flowchart LR
+    PR[Pull request] --> CHECKS[pytest + ruff + build checks]
+    CHECKS --> MERGE[Merge to main]
+    MERGE --> BUILD[Build + push :sha image]
+    BUILD --> BUMP[Commit tag to values.yaml]
+    BUMP --> ARGO[ArgoCD sync]
+```
+
 ## Tech stack
 
 | Layer | Technology |
@@ -66,7 +79,7 @@ The app itself: the FastAPI backend stores todos in PostgreSQL, caches reads in 
 | Infrastructure | Terraform (VPC, EKS, platform Helm releases) |
 | Ingress | Gateway API via NGINX Gateway Fabric |
 | Secrets | External Secrets Operator + AWS Secrets Manager |
-| CI | GitHub Actions (pytest + ruff on every push and PR) |
+| CI/CD | GitHub Actions — PRs run pytest, ruff, and credential-free Docker build checks; merges to main build and push the changed service's image tagged with the commit SHA, then CI commits the new tag into `helm/todo-app/values.yaml`, which ArgoCD detects and deploys. Branch protection requires all five checks before merge |
 
 ## Features
 
@@ -78,7 +91,7 @@ The app itself: the FastAPI backend stores todos in PostgreSQL, caches reads in 
 
 ## Local development
 
-Copy `.env.example` to `.env` and add a `JWT_SECRET` line (any random string — it is required by the API but not in the example file), then:
+Copy `.env.example` to `.env` (it includes a placeholder `JWT_SECRET` — fine for local use), then:
 
 ```bash
 docker compose up --build
@@ -147,7 +160,7 @@ kubectl get gateway -n todo-app
 
 Open the ADDRESS in a browser — the Gateway routes `/` to the frontend and `/api/*` to the API.
 
-Note: pushing a new `:latest` image alone does not redeploy anything (the manifests are unchanged); run `kubectl rollout restart deployment/<name> -n todo-app` after pushing images.
+Rollback is a git revert of the CI deploy commit that bumped the image tag in `helm/todo-app/values.yaml`.
 
 ## Teardown
 

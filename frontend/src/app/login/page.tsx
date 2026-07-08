@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-// check for workflow 2
+
 export default function LoginPage() {
   const { user, loading, login } = useAuth();
   const router = useRouter();

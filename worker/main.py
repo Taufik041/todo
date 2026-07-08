@@ -13,7 +13,6 @@ EXCHANGE_NAME = "todos"
 QUEUE_NAME = "todo_worker"
 
 
-# check for workflow 3
 async def on_message(message: aio_pika.abc.AbstractIncomingMessage) -> None:
     async with message.process():
         try:
