@@ -40,7 +40,7 @@ CACHE_TTL = 300  # 5 minutes
 redis_client: aioredis.Redis | None = None
 
 
-# check for workflow
+# check for workflow 2
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     global redis_client
