@@ -25,7 +25,12 @@ from api.models import (
     User,
     UserCreatedEvent,
 )
-from api.security import create_token, decode_token, hash_password, verify_password
+from api.security import (
+    create_token,
+    decode_token,
+    hash_password,
+    verify_password,
+)
 
 logger = logging.getLogger(__name__)
 
