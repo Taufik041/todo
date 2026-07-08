@@ -62,3 +62,6 @@ rabbitmq:
 
 eso:
   enabled: True
+
+gateway:
+  enabled: true
