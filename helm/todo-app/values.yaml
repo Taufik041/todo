@@ -50,6 +50,8 @@ postgres:
   database: todos
   storage: 1Gi
   storageClassName: gp3
+  # username: postgres
+  # password: postgres
 
 redis:
   image: redis:7-alpine
@@ -61,7 +63,10 @@ rabbitmq:
   managementPort: 15672
 
 eso:
-  enabled: True
+  enabled: true
+
+# Local/Kind mode: set eso.enabled to false and uncomment below
+# jwtSecret: dev-secret-change-me
 
 gateway:
   enabled: true

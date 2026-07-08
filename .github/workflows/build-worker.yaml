@@ -1,0 +1,14 @@
+name: build-api
+
+on:
+    push:
+        branches: [main]
+        paths:
+            - "worker/**"
+
+jobs:
+    build:
+        uses: ./.github/workflows/docker-build.yaml
+        with:
+            service: worker
+        secrets: inherit
