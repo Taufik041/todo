@@ -5,10 +5,12 @@ on:
         branches: [main]
         paths:
             - "frontend/**"
+            - "Dockerfile.frontend"
 
 jobs:
     build:
         uses: ./.github/workflows/docker-build.yaml
         with:
             service: frontend
+            dockerpath: Dockerfile.frontend
         secrets: inherit

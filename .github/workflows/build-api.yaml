@@ -5,10 +5,12 @@ on:
         branches: [main]
         paths:
             - "api/**"
+            - "Dockerfile.api"
 
 jobs:
     build:
         uses: ./.github/workflows/docker-build.yaml
         with:
             service: api
+            dockerpath: Dockerfile.api
         secrets: inherit

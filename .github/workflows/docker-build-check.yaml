@@ -1,0 +1,31 @@
+name: docker-build-check
+
+on:
+    pull_request:
+        paths:
+            - "api/**"
+            - "worker/**"
+            - "frontend/**"
+            - "Dockerfile.*"
+
+jobs:
+    check-api:
+        uses: ./.github/workflows/docker-build.yaml
+        with:
+            service: api
+            dockerpath: Dockerfile.api
+            push: false
+    
+    check-worker:
+        uses: ./.github/workflows/docker-build.yaml
+        with:
+            service: worker
+            dockerpath: Dockerfile.worker
+            push: false
+    
+    check-frontend:
+        uses: ./.github/workflows/docker-build.yaml
+        with:
+            service: frontend
+            dockerpath: Dockerfile.frontend
+            push: false
