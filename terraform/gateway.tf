@@ -12,6 +12,5 @@ resource "helm_release" "nginx_gateway" {
   chart            = "nginx-gateway-fabric"
   namespace        = "nginx-gateway"
   create_namespace = true
-
-  depends_on = [module.eks]
+  depends_on = [null_resource.gateway_api_crds]
 }
