@@ -1,7 +1,9 @@
 namespace: todo-app
 
 api:
-  image: taufik041/todo-api:latest
+  image:
+    repository: taufik041/todo-api
+    tag: latest
   serviceType: ClusterIP
   replicas: 1
   port: 8000
@@ -15,7 +17,9 @@ api:
       cpu: "250m"
 
 worker:
-  image: taufik041/todo-worker:latest
+  image:
+    repository: taufik041/todo-worker
+    tag: latest
   replicas: 1
   resources:
     requests:
@@ -26,7 +30,9 @@ worker:
       cpu: "100m"
 
 frontend:
-  image: taufik041/todo-frontend:latest
+  image:
+    repository: taufik041/todo-frontend
+    tag: latest
   serviceType: ClusterIP
   replicas: 1
   port: 3000
