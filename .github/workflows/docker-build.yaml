@@ -22,9 +22,13 @@ on:
 jobs:   
     build:
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+              with:
+                token: ${{ secrets.CI_PUSH_TOKEN || github.token }}
             
             - name: Login to DockerHub
               if: ${{ inputs.push }}
@@ -42,3 +46,14 @@ jobs:
                 tags: |
                     taufik041/todo-${{ inputs.service }}:latest
                     taufik041/todo-${{ inputs.service }}:${{ github.sha }}
+            
+            - name: Update image tag in values.yaml
+              if: ${{ inputs.push }}
+              run: |
+                yq -i '.${{ inputs.service }}.image.tag = "${{ github.sha }}"' helm/todo-app/values.yaml
+                git config user.name "github-actions[bot]"
+                git config user.email "github-actions[bot]@users.noreply.github.com"
+                git add helm/todo-app/values.yaml
+                git commit -m "ci: deploy ${{ inputs.service }} ${{ github.sha }}" || exit 0
+                git pull --rebase origin main
+                git push
