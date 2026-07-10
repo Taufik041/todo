@@ -2,11 +2,6 @@ name: docker-build-check
 
 on:
     pull_request:
-        paths:
-            - "api/**"
-            - "worker/**"
-            - "frontend/**"
-            - "Dockerfile.*"
 
 jobs:
     check-api:
