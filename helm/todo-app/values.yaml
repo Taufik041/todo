@@ -1,9 +1,8 @@
 namespace: todo-app
-
 api:
   image:
     repository: taufik041/todo-api
-    tag: latest
+    tag: fd51ac8d815b36cb90d183a6206a15525c92994a
   serviceType: ClusterIP
   replicas: 1
   port: 8000
@@ -15,7 +14,6 @@ api:
     limits:
       memory: "256Mi"
       cpu: "250m"
-
 worker:
   image:
     repository: taufik041/todo-worker
@@ -28,7 +26,6 @@ worker:
     limits:
       memory: "128Mi"
       cpu: "100m"
-
 frontend:
   image:
     repository: taufik041/todo-frontend
@@ -45,11 +42,9 @@ frontend:
     limits:
       memory: "256Mi"
       cpu: "250m"
-
 storageClass:
   create: true
   name: gp3
-
 postgres:
   image: postgres:16-alpine
   port: 5432
@@ -58,21 +53,16 @@ postgres:
   storageClassName: gp3
   # username: postgres
   # password: postgres
-
 redis:
   image: redis:7-alpine
   port: 6379
-
 rabbitmq:
   image: rabbitmq:3-management-alpine
   port: 5672
   managementPort: 15672
-
 eso:
   enabled: true
-
 # Local/Kind mode: set eso.enabled to false and uncomment below
 # jwtSecret: dev-secret-change-me
-
 gateway:
   enabled: true
