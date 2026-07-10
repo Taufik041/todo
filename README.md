@@ -52,7 +52,7 @@ The app itself: the FastAPI backend stores todos in PostgreSQL, caches reads in 
 
 ## CI/CD
 
-Every push and pull request runs pytest and ruff. Pull requests that touch a service (`api/`, `worker/`, `frontend/`, or a Dockerfile) also get a Docker build check per service: three path-filtered jobs call a single reusable `workflow_call` workflow (`docker-build.yaml`) with `push: false`, so PR checks receive no registry credentials. Branch protection requires all five checks (pytest, ruff, and the three build checks) before merge. On merge to main, per-service path-filtered workflows call the same reusable workflow with `secrets: inherit`, build and push the changed service's image tagged with the commit SHA, and commit the new tag into `helm/todo-app/values.yaml` — ArgoCD detects the change and deploys it.
+Every push and pull request runs pytest and ruff. Every pull request also gets a Docker build check per service: three jobs call a single reusable `workflow_call` workflow (`docker-build.yaml`) with `push: false`, so PR checks receive no registry credentials. Branch protection requires all five checks (pytest, ruff, and the three build checks) before merge. On merge to main, per-service path-filtered workflows call the same reusable workflow with `secrets: inherit`, build and push the changed service's image tagged with the commit SHA, and commit the new tag into `helm/todo-app/values.yaml` — ArgoCD detects the change and deploys it.
 
 ```mermaid
 flowchart LR
@@ -79,7 +79,7 @@ flowchart LR
 | Infrastructure | Terraform (VPC, EKS, platform Helm releases) |
 | Ingress | Gateway API via NGINX Gateway Fabric |
 | Secrets | External Secrets Operator + AWS Secrets Manager |
-| CI/CD | GitHub Actions — PRs run pytest, ruff, and credential-free Docker build checks; merges to main build and push the changed service's image tagged with the commit SHA, then CI commits the new tag into `helm/todo-app/values.yaml`, which ArgoCD detects and deploys. Branch protection requires all five checks before merge |
+| CI/CD | GitHub Actions — PR checks gate merges; merges build, push, and deploy via a `values.yaml` commit (see CI/CD section) |
 
 ## Features
 
@@ -224,4 +224,3 @@ Full write-ups in `docs/NOTES.md`; the short version:
 ## Demo
 
 Video walkthrough: _coming soon_
-change in readme for test delete me
